@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index :: page_head(title=~{::title})">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>用户管理</title>
+	<link rel="stylesheet" href="../../static/css/bootstrap.min.css" />
+</head>
+<body>
+	<header th:replace="index :: page_header"></header>
+	<div class="container" role="main">
+		<div class="page-header">
+			<a class="btn btn-primary pull-right" href="edit.html" th:href="@{/users/new}">添加</a>
+			<h2>用户管理</h2>
+		</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>用户名</th>
+					<th>姓名</th>
+					<th>角色</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user : ${users}">
+					<td th:text="${user.id}">1</td>
+					<td th:text="${user.username}">User Name</td>
+					<td th:text="${user.realname}">Real Name</td>
+					<td>
+						<ul class="list-inline">
+							<li th:each="auth : ${user.authorities}">
+								<span class="label label-info" th:text="${auth.authority}">角色</span>
+							</li>
+						</ul>
+					</td>
+					<td>
+						<ul class="list-inline">
+							<li>
+								<a class="btn btn-xs btn-primary" href="edit.html" th:href="@{/users/{id}/edit(id=${user.id})}">修改</a>
+							</li>
+							<li>
+								<form class="form-inline" th:method="delete" th:action="@{/users/{id}(id=${user.id})}">
+									<button class="btn btn-xs btn-danger">删除</button>
+								</form>
+							</li>
+						</ul>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<nav>
+			<ul class="pager" th:object="${users}" th:with="pageUrl=${@currentUrlWithoutParam.apply('page')}">
+				<li class="previous" th:classappend="*{number} le 0 ? 'disabled'">
+					<a href="#" th:remove="*{number} le 0 ? 'tag' : 'none'" th:href="@{${pageUrl}(page=*{number})}">
+						<span><span aria-hidden="true">&larr;</span> 上一页</span>
+					</a>
+				</li>
+				<li class="next" th:classappend="*{number} ge *{totalPages} - 1 ? 'disabled'">
+					<a href="#" th:remove="*{number} ge *{totalPages} - 1 ? 'tag' : 'none'" th:href="@{${pageUrl}(page=*{number}+2)}">
+						<span>下一页 <span aria-hidden="true">&rarr;</span></span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</body>
+</html>

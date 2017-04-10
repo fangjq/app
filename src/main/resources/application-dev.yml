@@ -6,7 +6,7 @@ spring:
   datasource:
     #url: 
     username: root
-    password: 
+    password: q1w2E#R$
 
 logging:
   level:
